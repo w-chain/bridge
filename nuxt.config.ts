@@ -8,10 +8,6 @@ export default defineNuxtConfig({
             dangerouslyAllowSVG: true
         }
     },
-    preset: 'awsAmplify',
-    output: {
-      dir: `../../dist/app`,
-    },
   },
 
   runtimeConfig: {
