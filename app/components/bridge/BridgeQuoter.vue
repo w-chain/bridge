@@ -1,12 +1,54 @@
 <script lang="ts" setup>
-import { Networks, Tokens } from '~~/shared/types';
+import { useVueDapp } from '@vue-dapp/core';
+import { useDebounceFn } from '#imports';
+import { formatUnits } from 'ethers';
+import { Networks, Tokens, type SupportedChainId } from '~~/shared/types';
+import { useBridgeContractStore, useNetworkStore, useTokenStore } from '~~/stores';
 
+const { isConnected, wallet, chainId, watchWalletChanged } = useVueDapp();
 const route = useRoute();
 const router = useRouter();
+const networkStore = useNetworkStore();
+const tokenStore = useTokenStore();
+const bridgeStore = useBridgeContractStore();
 
+const supportedTokens = computed(() => tokenStore.tokens);
+
+const recipient = ref(wallet.address)
+const amount = ref<number>();
 const sourceChain = ref<Networks>(Networks.ETH);
 const destinationChain = ref<Networks>(Networks.WCHAIN);
-const token = ref<Tokens>(Tokens.USDT);
+const token = ref(supportedTokens.value[0]?.symbol || Tokens.USDT);
+const selectedToken = computed(() => supportedTokens.value.find(t => t.symbol === token.value));
+
+const validateAmount = (value: string | number | null) => {
+  if (value === null || value === '') return undefined;
+  const numStr = String(value).replace(/^0+(?=\d)/, '');
+  const num = Number(numStr);
+  return isNaN(num) ? undefined : num;
+};
+
+const selectedTokenBalance = ref('0');
+
+const handleNewSourceChain = (newSourceChain: Networks) => {
+  networkStore.switchNetwork(newSourceChain);
+}
+
+const updateSelectedTokenBalance = async () => {
+  if (isConnected.value && selectedToken.value && selectedToken.value.address && chainId.value) {
+    if (getNetworkFromChainId(chainId.value) !== sourceChain.value) {
+      handleNewSourceChain(sourceChain.value);
+      await useWait(500);
+    }
+    const balance = await tokenStore.getUserTokenBalance(selectedToken.value.address);
+    selectedTokenBalance.value = formatUnits(balance, selectedToken.value.decimals);
+  }
+}
+
+watch(selectedToken, () => {
+  updateSelectedTokenBalance();
+  amount.value = undefined;
+}, { immediate: true });
 
 // Initialize from route query
 watchEffect(() => {
@@ -35,24 +77,73 @@ watch([sourceChain, destinationChain, token], ([newSourceChain, newDestinationCh
     } else {
       // If source chain was changed, update destination chain
       destinationChain.value = availableNetworks.find(n => n !== newSourceChain) || availableNetworks[0] as Networks;
+      handleNewSourceChain(newSourceChain);
     }
   }
   
   router.push({
     query: {
       ...route.query,
+
+      tab: 'bridge',
       sourceChain: sourceChain.value,
       destinationChain: destinationChain.value,
       token: newToken
     }
   });
-});
+}, { immediate: true });
 
 const handleSwapChains = () => {
   const temp = sourceChain.value;
   sourceChain.value = destinationChain.value;
   destinationChain.value = temp;
+  handleNewSourceChain(sourceChain.value);
 };
+
+const allowance = ref<number>(0);
+const shouldApprove = computed(() => {
+  if (amount.value) {
+    return amount.value > allowance.value;
+  }
+  return false;
+});
+
+const updateAllowance = useDebounceFn(async (newAmount: number) => {
+  if (newAmount && selectedToken.value?.address) {
+    const allowanceBig = await bridgeStore.getHandlerAllowance(selectedToken.value?.address);
+    if (allowanceBig !== undefined && selectedToken.value?.decimals) {
+      allowance.value = Number(formatUnits(allowanceBig, selectedToken.value?.decimals));
+    }
+  }
+}, 500);
+
+watch(amount, (newAmount) => {
+  if (typeof newAmount === 'number') {
+    updateAllowance(newAmount);
+  }
+});
+
+async function handleApprove() {
+  if (amount.value && selectedToken.value?.address) {
+    const { approve } = bridgeStore;
+    await approve(selectedToken.value?.address);
+  }
+}
+
+async function handleBridge() {
+  if (amount.value && selectedToken.value?.address && recipient.value) {
+    const { deposit } = bridgeStore;
+    await deposit(amount.value, recipient.value, token.value, getNetworkChainId(destinationChain.value) as SupportedChainId);
+  }
+}
+
+watchWalletChanged((wallet) => {
+  updateSelectedTokenBalance();
+  recipient.value = wallet.address;
+  if (getNetworkFromChainId(wallet.chainId) !== sourceChain.value) {
+    handleNewSourceChain(sourceChain.value);
+  }
+}, { immediate: true });
 </script>
 
 <template>
@@ -70,14 +161,18 @@ const handleSwapChains = () => {
 
       <div class="mt-4 flex justify-between gap-2 items-center bg-neutral-900 p-2 lg:p-4 rounded-md">
         <UInput 
+          :model-value="amount"
           class="w-full"
           size="xl"
           variant="ghost"
           placeholder="0"
+          min="0"
+          @update:model-value="amount = validateAmount($event)"
         />
         <div class="flex flex-col items-center">
           <ModalBridgeTokenSelect v-model:token="token" />
-          <div class="text-xs">Balance: 1000</div>
+          <USkeleton v-if="tokenStore.tokenBalanceLoading" class="w-24 h-5" />
+          <div v-else class="text-xs">Balance: {{ selectedTokenBalance }}</div>
         </div>
       </div>
     </UCard>
@@ -101,25 +196,36 @@ const handleSwapChains = () => {
           <img class="w-12" :src="`/images/networks/${destinationChain}.webp`" alt="Destination Chain Logo" loading="lazy">
         </div>
       </div>
-      <div class="mt-4 flex justify-between gap-2 items-center bg-neutral-900 p-2 lg:p-4 rounded-md">
+      <div class="mt-4 flex bg-neutral-900 p-2 lg:p-4 rounded-md">
         <UInput
+          v-model:model-value="amount"
           class="w-full"
           size="xl"
           variant="ghost"
           placeholder="0"
+          disabled
         />
-        <div>
-          <div class="text-xs text-nowrap">Balance: 1000</div>
-        </div>
       </div>
     </UCard>
     <!-- Bridge Button -->
-    <div class="flex justify-center items-center mt-4">
-      <UButton
+    <div class="flex flex-col gap-4 justify-center items-center mt-4">
+      <UButton 
+        v-if="Number(selectedTokenBalance) >= Number(amount) && shouldApprove"
         block
         size="xl"
         class="w-full"
+        label="Approve Bridge"
+        :loading="tokenStore.approveLoading"
+        @click="handleApprove"
+      />
+      <UButton
+        block
+        size="xl"
+        class="w-full cursor-pointer"
         :label="`Move Funds to ${destinationChain.toUpperCase()}`"
+        :disabled="!amount || Number(amount) > Number(selectedTokenBalance) || shouldApprove"
+        :loading="bridgeStore.loading"
+        @click="handleBridge"
       />
     </div>
 

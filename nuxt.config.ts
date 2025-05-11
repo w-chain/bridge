@@ -2,9 +2,18 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
+  runtimeConfig: {
+    public: {
+      network: 'testnet'
+    }
+  },
+
   modules: [
     '@nuxt/ui',
-    '@nuxt/eslint'
+    '@nuxt/eslint',
+    '@pinia/nuxt',
+    '@vue-dapp/nuxt',
+    '@vueuse/nuxt'
   ],
 
   css: ['~/assets/css/main.css'],

@@ -17,7 +17,7 @@ const tokens = getEnumValues(Tokens) as Tokens[];
     <UButton
       variant="ghost" 
       :avatar="{ src: `/images/tokens/${token}.webp`, alt: `${token} logo`  }"
-      :label="token.toUpperCase()"
+      :label="token"
       trailing-icon="i-lucide-chevron-down"
     />
 
@@ -31,7 +31,7 @@ const tokens = getEnumValues(Tokens) as Tokens[];
               variant="ghost" 
               class="cursor-pointer"
               :avatar="{ src: `/images/tokens/${token_}.webp`, alt: `${token_} logo`  }"
-              :label="token_.toUpperCase()"
+              :label="token_"
               @click="token = token_; open = false"
             />
         </li>

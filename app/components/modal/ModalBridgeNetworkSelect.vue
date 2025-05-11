@@ -30,7 +30,7 @@ const networks = getEnumValues(Networks) as Networks[];
               variant="ghost" 
               class="cursor-pointer"
               :avatar="{ src: `/images/networks/${network_}.webp`, alt: `${network_} logo`  }"
-              :label="network_.toUpperCase()"
+              :label="network_"
               :disabled="network === network_"
               @click="network = network_; open = false"
             />
