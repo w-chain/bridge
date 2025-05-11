@@ -7,7 +7,11 @@ export default defineNuxtConfig({
         imageSettings: {
             dangerouslyAllowSVG: true
         }
-    }
+    },
+    preset: 'awsAmplify',
+    output: {
+      dir: `../../dist/app`,
+    },
   },
 
   runtimeConfig: {
