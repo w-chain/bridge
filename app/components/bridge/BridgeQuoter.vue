@@ -155,7 +155,7 @@ watchWalletChanged((wallet) => {
           <ModalBridgeNetworkSelect v-model:network="sourceChain" direction="from" @update:network="handleSwapChains" />
         </div>
         <div>
-          <img class="w-12" :src="`/images/networks/${sourceChain}.webp`" alt="Source Chain Logo" loading="lazy">
+          <img class="w-12" :src="`/images/networks/${sourceChain.toLowerCase()}.webp`" alt="Source Chain Logo" loading="lazy">
         </div>
       </div>
 
@@ -193,7 +193,7 @@ watchWalletChanged((wallet) => {
           <ModalBridgeNetworkSelect v-model:network="destinationChain" direction="to" @update:network="handleSwapChains" />
         </div>
         <div>
-          <img class="w-12" :src="`/images/networks/${destinationChain}.webp`" alt="Destination Chain Logo" loading="lazy">
+          <img class="w-12" :src="`/images/networks/${destinationChain.toLowerCase()}.webp`" alt="Destination Chain Logo" loading="lazy">
         </div>
       </div>
       <div class="mt-4 flex bg-gray-50 dark:bg-neutral-900 p-2 lg:p-4 rounded-md border border-gray-200 dark:border-neutral-700">
