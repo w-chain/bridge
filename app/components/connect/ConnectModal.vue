@@ -48,7 +48,7 @@ const onDisconnect = () => {
               })
             "
           >
-            <img class="size-5 flegs items-center rounded-full" :src="detail.info.icon.toLowerCase()" :alt="detail.info.name" loading="lazy" />
+            <img class="size-5 flegs items-center rounded-full" :src="detail.info.icon" :alt="detail.info.name" loading="lazy" />
             <div>{{ detail.info.name }}</div>
           </UButton>
         </div>
