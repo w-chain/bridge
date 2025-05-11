@@ -19,7 +19,7 @@ const tokens = getEnumValues(Tokens) as Tokens[];
       :avatar="{ src: `/images/tokens/${token.toLowerCase()}.webp`, alt: `${token} logo`  }"
       :label="token"
       trailing-icon="i-lucide-chevron-down"
-      class="text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700"
+      class="text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-neutral-800"
     />
 
     <template #body>
@@ -30,7 +30,7 @@ const tokens = getEnumValues(Tokens) as Tokens[];
             <UButton
               size="xl"
               variant="ghost" 
-              class="cursor-pointer text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700"
+              class="cursor-pointer text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-neutral-900"
               :avatar="{ src: `/images/tokens/${token_.toLowerCase()}.webp`, alt: `${token_} logo`  }"
               :label="token_"
               @click="token = token_; open = false"

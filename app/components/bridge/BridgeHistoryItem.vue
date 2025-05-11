@@ -87,7 +87,7 @@ onMounted(async () => {
     <UAlert 
       v-if="isPending"
       class="my-2"
-      description="This may take up-to 5 minutes to complete."
+      description="This may takes up-to 5 minutes to complete."
       color="warning"
       icon="i-lucide-clock-10"
       variant="outline"
