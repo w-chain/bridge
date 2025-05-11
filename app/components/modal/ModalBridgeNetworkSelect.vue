@@ -29,7 +29,7 @@ const networks = getEnumValues(Networks) as Networks[];
               size="xl"
               variant="ghost" 
               class="cursor-pointer text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700"
-              :avatar="{ src: `/images/networks/${network_}.webp`, alt: `${network_} logo`  }"
+              :avatar="{ src: `/images/networks/${network_.toLowerCase()}.webp`, alt: `${network_} logo`  }"
               :label="network_"
               :disabled="network === network_"
               @click="network = network_; open = false"
