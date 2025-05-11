@@ -1,6 +1,6 @@
-# Nuxt UI Starter
+# W Bridge Interface
 
-Look at [Nuxt docs](https://nuxt.com/docs/getting-started/introduction) and [Nuxt UI docs](https://ui.nuxt.com) to learn more.
+This is W Bridge Interface, made with Nuxt 3 and Nuxt UI, using native bigint and Ethers JS v6.
 
 ## Setup
 

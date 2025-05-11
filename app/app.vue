@@ -17,7 +17,7 @@ useHead({
     { property: 'og:type', content: `website` },
     { name: 'description', content: 'W Bridge connecting W Chain to popular EVM Networks, enabling seamless funds movements between chains.' },
     { property: 'og:description', content: 'W Bridge connecting W Chain to popular EVM Networks, enabling seamless funds movements between chains.' },
-    { property: 'og:url', content: 'https://wbridge.w-chain.com/' },
+    { property: 'og:url', content: 'https://bridge.w-chain.com/' },
     { name: 'robots', content: 'follow, index' },
     { name: 'keywords', content: 'Bridge, DeFi, Staking, Lending, Capital' },
   ],
