@@ -149,7 +149,7 @@ watchWalletChanged((wallet) => {
 <template>
   <UCard class="p-2">
     <!-- From -->
-    <UCard class="p-4 bg-neutral-800">
+    <UCard class="p-2 bg-neutral-800">
       <div class="flex justify-between gap-2 items-center">
         <div>
           <ModalBridgeNetworkSelect v-model:network="sourceChain" direction="from" @update:network="handleSwapChains" />
@@ -205,6 +205,24 @@ watchWalletChanged((wallet) => {
           placeholder="0"
           disabled
         />
+      </div>
+    </UCard>
+
+    <UCard v-if="amount && !shouldApprove" class="my-4 border border-yellow-500">
+      <template #header>
+        <div class="text-sm">
+          Transaction Review
+        </div>
+      </template>
+      <div class="flex justify-end text-sm">
+        <div class="grid grid-cols-2 gap-1">
+          <div class="text-right">You will receive: </div>
+          <div>{{ amount }} {{ token }}</div>
+          <div class="text-right">Destination Chain: </div>
+          <div>{{ destinationChain }}</div>
+          <div class="text-right">Fee: </div>
+          <div>0.0 {{ sourceChain === Networks.ETH ? 'ETH' : 'WCO' }}</div>
+        </div>
       </div>
     </UCard>
     <!-- Bridge Button -->
