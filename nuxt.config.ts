@@ -2,14 +2,6 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
-  nitro: {
-    awsAmplify: {
-        imageSettings: {
-            dangerouslyAllowSVG: true
-        }
-    },
-  },
-
   runtimeConfig: {
     public: {
       network: 'testnet'
