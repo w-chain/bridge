@@ -147,9 +147,9 @@ watchWalletChanged((wallet) => {
 </script>
 
 <template>
-  <UCard class="p-2">
+  <UCard class="p-2 bg-white dark:bg-neutral-900">
     <!-- From -->
-    <UCard class="p-2 bg-neutral-800">
+    <UCard class="p-2 bg-gray-100 dark:bg-neutral-800">
       <div class="flex justify-between gap-2 items-center">
         <div>
           <ModalBridgeNetworkSelect v-model:network="sourceChain" direction="from" @update:network="handleSwapChains" />
@@ -159,7 +159,7 @@ watchWalletChanged((wallet) => {
         </div>
       </div>
 
-      <div class="mt-4 flex justify-between gap-2 items-center bg-neutral-900 p-2 lg:p-4 rounded-md">
+      <div class="mt-4 flex justify-between gap-2 items-center bg-gray-50 dark:bg-neutral-900 p-2 lg:p-4 rounded-md border border-gray-200 dark:border-neutral-700">
         <UInput 
           :model-value="amount"
           class="w-full"
@@ -172,7 +172,7 @@ watchWalletChanged((wallet) => {
         <div class="flex flex-col items-center">
           <ModalBridgeTokenSelect v-model:token="token" />
           <USkeleton v-if="tokenStore.tokenBalanceLoading" class="w-24 h-5" />
-          <div v-else class="text-xs">Balance: {{ selectedTokenBalance }}</div>
+          <div v-else class="text-xs text-gray-600 dark:text-gray-300">Balance: {{ selectedTokenBalance }}</div>
         </div>
       </div>
     </UCard>
@@ -181,13 +181,13 @@ watchWalletChanged((wallet) => {
     <div class="flex justify-center items-center -my-2">
       <UButton
         variant="soft"
-        class="hover:rotate-180 transition-transform duration-300 bg-neutral-900 cursor-pointer"
+        class="hover:rotate-180 transition-transform duration-300 bg-gray-200 dark:bg-neutral-900 cursor-pointer"
         icon="i-lucide-arrow-up-down"
         @click="handleSwapChains"
       />
     </div>
     <!-- To -->
-    <UCard class="p-4 bg-blue-800/70">
+    <UCard class="p-4 bg-blue-100 dark:bg-blue-800/70">
       <div class="flex justify-between items-center">
         <div>
           <ModalBridgeNetworkSelect v-model:network="destinationChain" direction="to" @update:network="handleSwapChains" />
@@ -196,7 +196,7 @@ watchWalletChanged((wallet) => {
           <img class="w-12" :src="`/images/networks/${destinationChain}.webp`" alt="Destination Chain Logo" loading="lazy">
         </div>
       </div>
-      <div class="mt-4 flex bg-neutral-900 p-2 lg:p-4 rounded-md">
+      <div class="mt-4 flex bg-gray-50 dark:bg-neutral-900 p-2 lg:p-4 rounded-md border border-gray-200 dark:border-neutral-700">
         <UInput
           v-model:model-value="amount"
           class="w-full"
@@ -208,13 +208,13 @@ watchWalletChanged((wallet) => {
       </div>
     </UCard>
 
-    <UCard v-if="amount && !shouldApprove" class="my-4 border border-yellow-500">
+    <UCard v-if="amount && !shouldApprove" class="my-4 border border-yellow-400 dark:border-yellow-500 bg-yellow-50 dark:bg-neutral-800">
       <template #header>
-        <div class="text-sm">
+        <div class="text-sm text-gray-800 dark:text-gray-200">
           Transaction Review
         </div>
       </template>
-      <div class="flex justify-end text-sm">
+      <div class="flex justify-end text-sm text-gray-700 dark:text-gray-300">
         <div class="grid grid-cols-2 gap-1">
           <div class="text-right">You will receive: </div>
           <div>{{ amount }} {{ token }}</div>

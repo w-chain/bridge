@@ -19,17 +19,18 @@ const tokens = getEnumValues(Tokens) as Tokens[];
       :avatar="{ src: `/images/tokens/${token}.webp`, alt: `${token} logo`  }"
       :label="token"
       trailing-icon="i-lucide-chevron-down"
+      class="text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-neutral-800 border border-gray-200 dark:border-neutral-700"
     />
 
     <template #body>
-      <ul>
+      <ul class="space-y-2">
         <li
           v-for="token_ in tokens"
           :key="token_">
             <UButton
               size="xl"
               variant="ghost" 
-              class="cursor-pointer"
+              class="cursor-pointer text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700"
               :avatar="{ src: `/images/tokens/${token_}.webp`, alt: `${token_} logo`  }"
               :label="token_"
               @click="token = token_; open = false"

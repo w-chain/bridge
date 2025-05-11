@@ -43,7 +43,10 @@ const networkStore = useNetworkStore();
 <template>
   <main class="relative flex flex-col items-center px-2 pt-16 gap-4 h-screen">
     <div class="absolute top-2 right-2">
-      <ConnectButton />
+      <div class="flex gap-2 items-center">
+        <ColorModeButton />
+        <ConnectButton />
+      </div>
     </div>
     <div class="lg:min-w-xl">
       <UAlert v-if="!networkStore.isAllowedChain" class="my-2" title="Unsupported Network!" description="We currently only support W Chain and ETH" icon="i-lucide-triangle-alert" color="error" />
