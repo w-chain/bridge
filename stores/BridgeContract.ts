@@ -8,11 +8,16 @@ import { TransactionStatus } from '~~/shared/types';
 import { BRIDGE_ABI } from '~~/shared/abi/bridge';
 import { useTokenStore, useTransactionStore, useNetworkStore } from '~~/stores';
 import type { ContractTransactionResponse } from 'ethers';
+import { LazyModalBridgePreflightChecks } from '#components';
 
 export const useBridgeContractStore = defineStore('BridgeContract', () => {
   const { isConnected, wallet, chainId } = useVueDapp();
   const toast = useToast();
+  const overlay = useOverlay();
   const router = useRouter();
+
+  const preflightModal = overlay.create(LazyModalBridgePreflightChecks);
+  const agreedToTerms = ref(false);
   
   const contracts = computed(() => chainId.value? BRIDGE_CONTRACT_REGISTRY[chainId.value as SupportedChainId] : undefined)
   const tokenStore = useTokenStore();
@@ -41,11 +46,19 @@ export const useBridgeContractStore = defineStore('BridgeContract', () => {
 
   async function approve(tokenAddress: string) {
     if (!contracts.value ||!wallet.provider ||!isConnected.value) return;
+    if (agreedToTerms.value === false) {
+      preflightModal.open();
+      return;
+    }
     const handlerAddress = contracts.value.erc20Handler;
     return tokenStore.approve(tokenAddress, handlerAddress);
   }
 
   async function deposit(amount: number, recipient: string, token: Tokens, destinationChainId: SupportedChainId) {
+    if (agreedToTerms.value === false) {
+      preflightModal.open();
+      return;
+    }
     const tokenData = tokenStore.getTokenBySymbol(token);
     if (!contracts.value ||!wallet.provider ||!isConnected.value ||!tokenData) return;
     
@@ -173,6 +186,7 @@ export const useBridgeContractStore = defineStore('BridgeContract', () => {
   return {
     contracts,
     loading,
+    agreedToTerms,
     getHandlerAllowance,
     deposit,
     approve,
