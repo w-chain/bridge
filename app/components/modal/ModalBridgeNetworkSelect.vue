@@ -11,7 +11,7 @@ const networks = getEnumValues(Networks) as Networks[];
   <UModal 
     v-model:open="open" 
     title="Select Token" 
-    description="Select the token you want to move from Source Chain."
+    :description="`Select Network you want to transfer ${props.direction}`"
     :ui="{ content: 'max-w-md' }"
   >
     <UButton

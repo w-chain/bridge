@@ -19,7 +19,6 @@ const tokens = getEnumValues(Tokens) as Tokens[];
       :avatar="{ src: `/images/tokens/${token.toLowerCase()}.webp`, alt: `${token} logo`  }"
       :label="token"
       trailing-icon="i-lucide-chevron-down"
-      class="text-gray-800 dark:text-gray-200 bg-gray-100 dark:bg-neutral-800"
     />
 
     <template #body>
