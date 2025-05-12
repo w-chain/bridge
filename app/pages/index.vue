@@ -37,6 +37,29 @@ watch(route, (newRoute) => {
 
 
 const networkStore = useNetworkStore();
+const { isTestnetDomain } = useDomain();
+const { addWChainTestnet, addWChainMainnet } = useAddNetwork();
+
+const domainAlertDesciption = computed(() => {
+  if (isTestnetDomain.value) {
+    return 'This is a Testnet domain. Only W Chain Testnet and ETH Sepolia are supported.'
+  } else {
+    return 'This Bridge currently only support W Chain and ETH, please make sure you have the networks RPC settings.'}
+});
+
+const alertActions = computed(() => {
+  if (isTestnetDomain.value) {
+    return [{
+      label: 'Add W Chain Testnet RPC',
+      click: () => addWChainTestnet()
+    }]
+  } else {
+    return [{
+      label: 'Add W Chain Mainnet RPC',
+      click: () => addWChainMainnet()
+    }]
+  }
+});
 
 </script>
 
@@ -48,9 +71,9 @@ const networkStore = useNetworkStore();
         <ConnectButton />
       </div>
     </div>
-    <div class="lg:min-w-xl">
-      <UAlert v-if="!networkStore.isAllowedChain" class="my-2" title="Unsupported Network!" description="We currently only support W Chain and ETH" icon="i-lucide-triangle-alert" color="error" />
-      <UTabs v-model="activeTab" :items="tabs" >
+    <div class="lg:min-w-xl lg:max-w-xl">
+      <UAlert v-if="!networkStore.isAllowedChain" class="my-2" title="Unsupported Network!" :description="domainAlertDesciption" icon="i-lucide-triangle-alert" color="error" :actions="alertActions" />
+      <UTabs v-else v-model="activeTab" :items="tabs" >
         <template #bridge>
           <BridgeQuoter />
         </template>
