@@ -4,7 +4,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      network: 'testnet'
+      network: process.env.NUXT_PUBLIC_NETWORK || 'testnet'
     }
   },
 
