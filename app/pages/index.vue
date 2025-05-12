@@ -65,13 +65,8 @@ const alertActions = computed(() => {
 
 <template>
   <main class="relative flex flex-col items-center px-2 pt-16 gap-4 h-screen">
-    <div class="absolute top-2 right-2">
-      <div class="flex gap-2 items-center">
-        <ColorModeButton />
-        <ConnectButton />
-      </div>
-    </div>
-    <div class="lg:min-w-xl lg:max-w-xl">
+    <TopNavBar />
+    <div class="mt-4 lg:mt-8 lg:min-w-xl lg:max-w-xl">
       <UAlert v-if="!networkStore.isAllowedChain" class="my-2" title="Unsupported Network!" :description="domainAlertDesciption" icon="i-lucide-triangle-alert" color="error" :actions="alertActions" />
       <UTabs v-else v-model="activeTab" :items="tabs" >
         <template #bridge>

@@ -8,6 +8,11 @@ export default defineNuxtConfig({
     }
   },
 
+  routeRules: {
+    '/': { prerender: true },
+    '/migration': { redirect: { to: 'https://legacy-brige.w-chain.com/migration', statusCode: 301 } }
+  },
+
   modules: [
     '@nuxt/ui',
     '@nuxt/eslint',
