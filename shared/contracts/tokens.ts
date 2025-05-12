@@ -8,8 +8,8 @@ export const TOKEN_CONTRACT_REGISTRY = {
     { name: 'USD Coin', symbol: Tokens.USDC, address: '0x5880D73B892745Df7465bcCa1A21cF79Ea2A7Ff5', resourceId: '0x00000000000000000000005880d73b892745df7465bcca1a21cf79ea2a7ff501', decimals: 6 },
   ],
   171717: [
-    { name: 'Tether USD', symbol: Tokens.USDT, address: '0x0', resourceId: '0x0000000000000000000000dac17f958d2ee523a2206206994597c13d831ec701', decimals: 6 },
-    { name: 'USD Coin', symbol: Tokens.USDC, address: '0x0', resourceId: '0x0000000000000000000000a0b86991c6218b36c1d19d4a2e9eb0ce3606eb4801', decimals: 6 },
+    { name: 'Tether USD', symbol: Tokens.USDT, address: '0x50EB179d89Bc33a55C48a58a4da7F10E5B76A6B4', resourceId: '0x0000000000000000000000dac17f958d2ee523a2206206994597c13d831ec701', decimals: 6 },
+    { name: 'USD Coin', symbol: Tokens.USDC, address: '0xeb2A4f971Bb9c9864d1115C956512B63e8ec7663', resourceId: '0x0000000000000000000000a0b86991c6218b36c1d19d4a2e9eb0ce3606eb4801', decimals: 6 },
   ],
   71117: [
     { name: 'Tether USD', symbol: Tokens.USDT, address: '0x9D6d68774326b2100adD0aA29C928Ed7bdC3B127', resourceId: '0x00000000000000000000009373d5cec0833ae2f8b45b22a3159a7b956d7b6901', decimals: 6 },
