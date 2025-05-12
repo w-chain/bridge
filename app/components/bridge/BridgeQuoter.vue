@@ -127,6 +127,7 @@ async function handleApprove() {
   if (amount.value && selectedToken.value?.address) {
     const { approve } = bridgeStore;
     await approve(selectedToken.value?.address);
+    updateAllowance(amount.value);
   }
 }
 
