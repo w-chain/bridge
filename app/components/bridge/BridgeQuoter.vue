@@ -34,7 +34,7 @@ const handleNewSourceChain = (newSourceChain: Networks) => {
   networkStore.switchNetwork(newSourceChain);
 }
 
-const updateSelectedTokenBalance = async () => {
+const updateSelectedTokenBalance = useDebounceFn(async () => {
   if (isConnected.value && selectedToken.value && selectedToken.value.address && chainId.value) {
     if (getNetworkFromChainId(chainId.value) !== sourceChain.value) {
       handleNewSourceChain(sourceChain.value);
@@ -43,7 +43,7 @@ const updateSelectedTokenBalance = async () => {
     const balance = await tokenStore.getUserTokenBalance(selectedToken.value.address);
     selectedTokenBalance.value = formatUnits(balance, selectedToken.value.decimals);
   }
-}
+}, 500);
 
 watch(selectedToken, () => {
   updateSelectedTokenBalance();

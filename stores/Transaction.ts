@@ -88,6 +88,14 @@ export const useTransactionStore = defineStore('Transaction', () => {
     )
   )
 
+  function clearCompletedTransactions() {
+    transactions.value = transactions.value.filter(tx => 
+      tx.status === TransactionStatus.PENDING || 
+      tx.status === TransactionStatus.AWAITING
+    )
+    persistTransactions()
+  }
+
   return {
     transactions,
     loading,
@@ -97,6 +105,7 @@ export const useTransactionStore = defineStore('Transaction', () => {
     removeTransaction,
     getTransaction,
     pendingTransactions,
-    completedTransactions
+    completedTransactions,
+    clearCompletedTransactions
   }
 })
