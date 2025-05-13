@@ -56,7 +56,7 @@ onMounted(async () => {
     }
     stopWatcher() // Stop the watcher
   })
-})
+});
 
 </script>
 
@@ -96,7 +96,11 @@ onMounted(async () => {
     <div class="grid grid-cols-2 gap-4 text-sm">
       <div>
         <div class="text-gray-400">Amount</div>
-        <div class="flex gap-2 items-center">{{ transaction.amount }} <UBadge variant="outline" :label="transaction.tokenSymbol" :avatar="{ src: `/images/tokens/${transaction.tokenSymbol.toLowerCase()}.webp`, alt: `${transaction.tokenSymbol} logo` }" /></div>
+        <div class="flex gap-2 items-center">
+          {{ transaction.amount }}
+          <UBadge variant="outline" :label="transaction.tokenSymbol" :avatar="{ src: `/images/tokens/${transaction.tokenSymbol.toLowerCase()}.webp`, alt: `${transaction.tokenSymbol} logo` }" />
+          <ModalAddToken :token-address="transaction.tokenAddress" :to-chain-id="transaction.toChainId" />
+        </div>
       </div>
       <div>
         <div class="text-gray-400">Recipient</div>

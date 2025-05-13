@@ -94,6 +94,13 @@ export const useTokenStore = defineStore('Token', () => {
     return tokens.value.find(token => token.symbol === symbol);
   }
 
+  function getTokenByAddress(address: string) {
+    for (const chainId in TOKEN_CONTRACT_REGISTRY) {
+      const token = TOKEN_CONTRACT_REGISTRY[Number(chainId) as SupportedChainId].find(token => token.address === address);
+      if (token) return token;
+    }
+  }
+
   return {
     tokens,
     tokenBalanceLoading,
@@ -101,6 +108,7 @@ export const useTokenStore = defineStore('Token', () => {
     approveLoading,
     approve,
     getTokenBySymbol,
+    getTokenByAddress,
     getUserTokenAllowance,
     handlerAllowances,
   }
