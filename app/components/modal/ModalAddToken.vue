@@ -1,17 +1,13 @@
 <script lang="ts" setup>
 import { useClipboard } from '@vueuse/core'
-import { useTokenStore } from '~~/stores';
 
 const props = defineProps<{
-  tokenAddress: string,
+  tokenSymbol: string,
   toChainId: number,
 }>();
 
-const { copy, copied } = useClipboard({ source: () => props.tokenAddress })
-
-const tokenStore = useTokenStore();
 const token = computed(() => {
-  return tokenStore.getTokenByAddress(props.tokenAddress);
+  return getTokenByChainIdAndSymbol(props.toChainId, props.tokenSymbol);
 });
 const open = ref(false);
 
@@ -25,6 +21,8 @@ watch(open, newVal => {
   if (newVal) triggerAddToken()
 })
 
+
+const { copy, copied } = useClipboard({ source: () => token.value?.address || '' })
 </script>
 
 <template>

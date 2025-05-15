@@ -134,7 +134,7 @@ async function handleApprove() {
 async function handleBridge() {
   if (amount.value && selectedToken.value?.address && recipient.value) {
     const { deposit } = bridgeStore;
-    await deposit(amount.value, recipient.value, token.value, getNetworkChainId(destinationChain.value) as SupportedChainId);
+    await deposit(amount.value, recipient.value, token.value, getNetworkChainId(destinationChain.value, networkStore.isTestnet) as SupportedChainId);
   }
 }
 

@@ -99,7 +99,7 @@ onMounted(async () => {
         <div class="flex gap-2 items-center">
           {{ transaction.amount }}
           <UBadge variant="outline" :label="transaction.tokenSymbol" :avatar="{ src: `/images/tokens/${transaction.tokenSymbol.toLowerCase()}.webp`, alt: `${transaction.tokenSymbol} logo` }" />
-          <ModalAddToken :token-address="transaction.tokenAddress" :to-chain-id="transaction.toChainId" />
+          <ModalAddToken :token-symbol="transaction.tokenSymbol" :to-chain-id="transaction.toChainId" />
         </div>
       </div>
       <div>
