@@ -148,7 +148,7 @@ watchWalletChanged((wallet) => {
 </script>
 
 <template>
-  <UCard class="p-2 bg-white dark:bg-neutral-900">
+  <div>
     <!-- From -->
     <UCard class="p-2 bg-gray-100 dark:bg-neutral-800">
       <div class="flex justify-between gap-2 items-center">
@@ -248,5 +248,5 @@ watchWalletChanged((wallet) => {
       />
     </div>
 
-  </UCard>
+  </div>
 </template>
