@@ -32,25 +32,26 @@ const onDisconnect = () => {
   <UModal
     :close="{ onClick: () => emit('close', false) }"
     :ui="{ content:'max-w-md'  }"
-    title="Connect your wallet:"
+    title="Connect Wallet"
+    description="Click on the Wallet app you want to use."
   >
     <template #body>
       <div v-if="!isConnected" class="space-y-4 px-4 py-8" >
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 px-4">
+        <div class="grid grid-cols-1 gap-4 px-4">
           <UButton
             v-for="detail in providerDetails"
             :key="detail.info.uuid"
+            :avatar="{ src: detail.info.icon, alt: detail.info.name }"
             variant="soft"
+            size="xl"
+            :label="detail.info.name"
             @click="
               onClickWallet('BrowserWallet', {
                 target: 'rdns',
                 rdns: detail.info.rdns,
               })
             "
-          >
-            <img class="size-5 flegs items-center rounded-full" :src="detail.info.icon" :alt="detail.info.name" loading="lazy" />
-            <div>{{ detail.info.name }}</div>
-          </UButton>
+          />
         </div>
       </div>
 

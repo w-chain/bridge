@@ -18,6 +18,7 @@
     "@pinia/nuxt": "^0.11.0",
     "@vue-dapp/core": "^1.5.6",
     "@vue-dapp/nuxt": "^1.5.6",
+    "@vue-dapp/walletconnect": "^1.5.7",
     "@vueuse/nuxt": "13.1.0",
     "ethers": "^6.14.0",
     "nuxt": "^3.17.2",
