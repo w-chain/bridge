@@ -86,6 +86,7 @@ export const useBridgeStatesStore = defineStore('BridgeStates', () => {
     handlerAllowance,
     selectedToken,
     resetTokens,
+    fetchHandlerAllowance,
     swapNetworks,
     init
   }

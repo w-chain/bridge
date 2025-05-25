@@ -22,6 +22,7 @@ const handleAction = async () => {
   
   if (needToApprove.value) {
     await bridgeContract.approve(token);
+    await bridgeStates.fetchHandlerAllowance();
   } else {
     await bridgeContract.deposit(amount.value, wallet.address, token, bridgeStates.toChainId);
   }
