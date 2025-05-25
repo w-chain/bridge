@@ -28,6 +28,10 @@ useHead({
 
 <template>
   <UApp>
-    <NuxtPage />
+    <main class="min-h-screen relative flex flex-col items-center px-2 pt-8 gap-4">
+      <TopNavBar />
+      <NuxtPage />
+      <Footer />
+    </main>
   </UApp>
 </template>

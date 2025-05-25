@@ -1,10 +1,24 @@
 <script lang="ts" setup>
-import { getEnumValues } from '~~/shared/types';
+import { Networks, TokenSymbols } from '~~/shared/types';
+import { getTokenImage } from '~~/shared/utils';
+import { useBridgeStatesStore } from '~~/stores';
 
-const token = defineModel<Tokens>('token', { default: Tokens.USDT })
+const bridgeStates = useBridgeStatesStore();
+
 const open = ref(false);
 
-const tokens = getEnumValues(Tokens) as Tokens[];
+const availableFromTokens = ref([TokenSymbols.USDT, TokenSymbols.USDC]);
+
+watch(open, newOpen => {
+  if (newOpen) {
+    if (bridgeStates.from === Networks.WCHAIN && bridgeStates.to === Networks.BSC) {
+      availableFromTokens.value = [TokenSymbols.bUSDT, TokenSymbols.bUSDC];
+    } else {
+      availableFromTokens.value = [TokenSymbols.USDT, TokenSymbols.USDC];
+    }
+  }
+})
+
 </script>
 
 <template>
@@ -15,24 +29,24 @@ const tokens = getEnumValues(Tokens) as Tokens[];
     :ui="{ content: 'max-w-md' }"
   >
     <UButton
-      variant="ghost" 
-      :avatar="{ src: `/images/tokens/${token.toLowerCase()}.webp`, alt: `${token} logo`  }"
-      :label="token"
+      :variant="bridgeStates.fromToken ? 'ghost' : 'solid'" 
+      :avatar="bridgeStates.fromToken ? { src: getTokenImage(bridgeStates.fromToken), alt: `${bridgeStates.fromToken} logo`  } : undefined"
+      :label="bridgeStates.fromToken || 'Select Token'"
       trailing-icon="i-lucide-chevron-down"
     />
 
     <template #body>
       <ul class="space-y-2">
         <li
-          v-for="token_ in tokens"
+          v-for="token_ in availableFromTokens"
           :key="token_">
             <UButton
               size="xl"
               variant="ghost" 
               class="cursor-pointer text-gray-800 dark:text-gray-200 bg-gray-50 dark:bg-neutral-900"
-              :avatar="{ src: `/images/tokens/${token_.toLowerCase()}.webp`, alt: `${token_} logo`  }"
+              :avatar="{ src: getTokenImage(token_), alt: `${token_} logo`  }"
               :label="token_"
-              @click="token = token_; open = false"
+              @click="bridgeStates.fromToken = token_; open = false"
             />
         </li>
       </ul>

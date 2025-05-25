@@ -2,14 +2,19 @@ export default defineAppConfig({
   // https://ui.nuxt.com/getting-started/theme#design-system
   ui: {
     colors: {
-      primary: 'blue',
-      neutral: 'slate',
+      primary: 'royal-blue',
+      neutral: 'neutral',
+    },
+    icons: {
+      loading: 'i-lucide-loader-circle'
     },
     button: {
-      defaultVariants: {
-        // Set default button color to neutral
-        // color: 'neutral'
+      slots: {
+        base: 'rounded-xl cursor-pointer',
       }
+    },
+    skeleton: {
+      base: 'dark:bg-neutral-400'
     }
   }
 })

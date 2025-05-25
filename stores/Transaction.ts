@@ -77,7 +77,7 @@ export const useTransactionStore = defineStore('Transaction', () => {
     transactions.value.filter(tx => 
       tx.status === TransactionStatus.PENDING || 
       tx.status === TransactionStatus.AWAITING
-    )
+    ).reverse()
   )
 
   const completedTransactions = computed(() =>
@@ -85,7 +85,7 @@ export const useTransactionStore = defineStore('Transaction', () => {
       tx.status === TransactionStatus.SUCCESS || 
       tx.status === TransactionStatus.FAILED ||
       tx.status === TransactionStatus.REJECTED
-    )
+    ).reverse()
   )
 
   function clearCompletedTransactions() {

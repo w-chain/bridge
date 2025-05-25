@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useClipboard } from '@vueuse/core'
+import { getTokenBySymbol } from '~~/shared/registry/tokens';
 
 const props = defineProps<{
   tokenSymbol: string,
@@ -7,7 +8,7 @@ const props = defineProps<{
 }>();
 
 const token = computed(() => {
-  return getTokenByChainIdAndSymbol(props.toChainId, props.tokenSymbol);
+  return getTokenBySymbol(props.toChainId, props.tokenSymbol as TokenSymbols);
 });
 const open = ref(false);
 

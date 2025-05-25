@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { shortenAddress } from '@vue-dapp/core';
-import { UIcon } from '#components';
 import type { BridgeTransaction } from '~~/shared/types/transaction';
 import { getNetworkFromChainId } from '~~/shared/utils/network';
 import { useBridgeContractStore } from '~~/stores';
@@ -26,10 +25,18 @@ async function handleCheckTransaction() {
   }
 }
 
-onMounted(async () => {
-  await nextTick();
+let intervalId: NodeJS.Timeout | null = null
 
-  let intervalId: NodeJS.Timeout | null = null
+// Create a composable for cleanup
+const cleanup = () => {
+  if (intervalId) {
+    clearInterval(intervalId)
+    intervalId = null
+  }
+}
+
+onMounted(async () => {
+  await nextTick()
 
   // Start interval if isPending is true
   if (isPending.value) {
@@ -37,31 +44,22 @@ onMounted(async () => {
   }
 
   // Watch for changes in isPending
-  const stopWatcher = watch(isPending, (newValue) => {
+  return watch(isPending, (newValue) => {
     if (newValue && !intervalId) {
       // Start interval when isPending becomes true
       intervalId = setInterval(handleCheckTransaction, 10_000)
     } else if (!newValue && intervalId) {
       // Clear interval when isPending becomes false
-      clearInterval(intervalId)
-      intervalId = null
+      cleanup()
     }
   })
+})
 
-  // Cleanup on component unmount
-  onUnmounted(() => {
-    if (intervalId) {
-      clearInterval(intervalId)
-      intervalId = null
-    }
-    stopWatcher() // Stop the watcher
-  })
-});
-
+onUnmounted(cleanup)
 </script>
 
 <template>
-  <div class="p-4 border rounded-lg mb-4 bg-white/5" :class="{ 'border-yellow-500': isPending }" >
+  <div class="p-4 rounded-xl mb-4 bg-white/5" :class="{ 'border border-yellow-500': isPending }" >
     <div class="flex justify-between items-center mb-2">
       <div class="flex items-center gap-2">
         <span class="text-sm font-semibold">From: {{ getNetworkFromChainId(transaction.fromChainId) }}</span>
@@ -98,8 +96,8 @@ onMounted(async () => {
         <div class="text-gray-400">Amount</div>
         <div class="flex gap-2 items-center">
           {{ transaction.amount }}
-          <UBadge variant="outline" :label="transaction.tokenSymbol" :avatar="{ src: `/images/tokens/${transaction.tokenSymbol.toLowerCase()}.webp`, alt: `${transaction.tokenSymbol} logo` }" />
-          <ModalAddToken :token-symbol="transaction.tokenSymbol" :to-chain-id="transaction.toChainId" />
+          <UBadge variant="outline" :label="getBSCTargetToken(transaction.tokenSymbol as TokenSymbols)" :avatar="{ src: getTokenImage(transaction.tokenSymbol as TokenSymbols), alt: `${transaction.tokenSymbol} logo` }" />
+          <ModalAddToken :token-symbol="getBSCTargetToken(transaction.tokenSymbol as TokenSymbols)" :to-chain-id="transaction.toChainId" />
         </div>
       </div>
       <div>

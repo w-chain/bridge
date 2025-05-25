@@ -23,19 +23,26 @@ const items = ref<CheckboxGroupItem[]>([
 
 const value = ref<CheckboxGroupValue[]>([]);
 
+const props = defineProps<{
+  onResult?: (agreed: boolean) => void
+}>();
+
 const emit = defineEmits<{ close: [boolean] }>();
 
 const bridgeStore = useBridgeContractStore();
 
-function handleAgree() {
-  bridgeStore.agreedToTerms = true;
-  emit('close', true);
+function handleResult(agreed: boolean) {
+  if (agreed) {
+    bridgeStore.agreedToTerms = true;
+  }
+  props.onResult?.(agreed);
+  emit('close', agreed);
 }
 </script>
 
 <template>
   <UModal 
-    :close="{ onClick: () => emit('close', false) }"
+    :close="{ onClick: () => handleResult(false) }"
     :title="`Service Acknowledgement`"
   >
     <template #body>
@@ -46,7 +53,7 @@ function handleAgree() {
         <UButton
           variant="outline"
           color="error"
-          @click="emit('close', false)"
+          @click="handleResult(false)"
         >
           Cancel
         </UButton>
@@ -54,7 +61,7 @@ function handleAgree() {
           :disabled="value.length !== items.length"
           class="w-full"
           color="primary"
-          @click="handleAgree"
+          @click="handleResult(true)"
         >
           Agree & Continue
         </UButton>

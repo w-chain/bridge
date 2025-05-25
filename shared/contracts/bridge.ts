@@ -17,5 +17,15 @@ export const BRIDGE_CONTRACT_REGISTRY = {
   171717: {
     bridge: '0x534afD1209540e60838E8D2Ac761a1B0f43aB663',
     erc20Handler: '0x4E6FD9223D0cd7996Fd50876Da2e83C5316C179e'
+  },
+
+  97: {
+    bridge: '0xD732B4DFEb181458C7a39952C22E71bb1E945ca9',
+    erc20Handler: '0x9373D5cec0833Ae2f8b45b22A3159a7B956d7B69'
+  },
+
+  56: {
+    bridge: '',
+    erc20Handler: ''
   }
 }
