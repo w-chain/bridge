@@ -27,35 +27,26 @@ async function handleCheckTransaction() {
 
 let intervalId: NodeJS.Timeout | null = null
 
-// Create a composable for cleanup
-const cleanup = () => {
+// Setup watch outside of onMounted
+const stopWatch = watch(isPending, (newValue) => {
+  if (newValue && !intervalId) {
+    // Start interval when isPending becomes true
+    intervalId = setInterval(handleCheckTransaction, 10_000)
+  } else if (!newValue && intervalId) {
+    // Clear interval when isPending becomes false
+    clearInterval(intervalId)
+    intervalId = null
+  }
+}, { immediate: true })
+
+// Cleanup on component unmount
+onUnmounted(() => {
   if (intervalId) {
     clearInterval(intervalId)
     intervalId = null
   }
-}
-
-onMounted(async () => {
-  await nextTick()
-
-  // Start interval if isPending is true
-  if (isPending.value) {
-    intervalId = setInterval(handleCheckTransaction, 10_000) // 10 seconds
-  }
-
-  // Watch for changes in isPending
-  return watch(isPending, (newValue) => {
-    if (newValue && !intervalId) {
-      // Start interval when isPending becomes true
-      intervalId = setInterval(handleCheckTransaction, 10_000)
-    } else if (!newValue && intervalId) {
-      // Clear interval when isPending becomes false
-      cleanup()
-    }
-  })
+  stopWatch()
 })
-
-onUnmounted(cleanup)
 </script>
 
 <template>
