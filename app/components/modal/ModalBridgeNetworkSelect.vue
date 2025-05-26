@@ -65,6 +65,7 @@ const isNetworkDisabled = (network_: Networks) => {
         trailing-icon="i-lucide-chevron-down"
         block
         size="xl"
+        :ui="{ label: 'text-[10px] sm:text-xs', trailingIcon: 'size-4 sm:size-6' }"
       />
     </div>
 

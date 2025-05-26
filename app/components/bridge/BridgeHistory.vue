@@ -16,7 +16,7 @@ const handleClearCompletedTransactions = async () => {
 
 <template>
   <div class="h-screen flex flex-col overflow-hidden">
-    <div class="space-y-4 flex-1 flex flex-col">
+    <div class="space-y-4 flex flex-col">
       <h2 class="text-xl font-semibold">Pending Transactions</h2>
       <div class="flex-none overflow-y-auto">
         <div v-if="pendingTransactions.length === 0" class="text-center text-gray-400 py-8">
@@ -43,7 +43,7 @@ const handleClearCompletedTransactions = async () => {
           Clear Completed Txs
         </UButton>
       </div>
-      <div class="flex-1 overflow-y-auto">
+      <div class="max-h-1/2 overflow-scroll">
         <div v-if="completedTransactions.length === 0" class="text-center text-gray-400 py-8">
           No completed transactions
         </div>

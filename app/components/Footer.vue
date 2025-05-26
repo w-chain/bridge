@@ -19,7 +19,7 @@ const socials = [{
 </script>
 
 <template>
-  <div class="absolute bottom-1 left-1 w-full py-4">
+  <div class="w-full py-4">
     <div class="flex flex-col items-center justify-center gap-4 max-w-lg mx-auto">
       <div class="font-semibold">Powered by <NuxtLink class="underline" to="https://w-chain.com" external target="_blank">W Chain</NuxtLink></div>
       <div class="flex justify-center gap-4">

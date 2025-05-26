@@ -50,9 +50,11 @@ useHead({
 
 <template>
   <UApp>
-    <main class="min-h-screen relative flex flex-col items-center px-2 pt-8 gap-4">
+    <main class="min-h-screen relative flex flex-col items-center px-2 pt-8">
       <TopNavBar />
-      <NuxtPage />
+      <div class="flex-grow w-full flex flex-col items-center gap-4">
+        <NuxtPage />
+      </div>
       <Footer />
     </main>
   </UApp>

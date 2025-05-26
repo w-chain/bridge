@@ -33,9 +33,9 @@ watchWalletChanged(() => bridgeStates.resetTokens())
 </script>
 
 <template>
-  <div>
-    <div class="p-4 rounded-xl light:bg-gradient-to-br light:from-blue-50 light:to-80% light:to-blue-300/80 bg-neutral-800">
-      <div class="flex flex-col items-center gap-8 p-4">
+  <div class="px-2">
+    <div class="p-2 sm:p-4 rounded-xl light:bg-gradient-to-br light:from-blue-50 light:to-80% light:to-blue-300/80 bg-neutral-800">
+      <div class="flex flex-col items-center gap-8 p-2 sm:p-4">
         <BridgeNetworkSelectors />
         <BridgeTokenAmount v-model="amount" />
         <UButton 
