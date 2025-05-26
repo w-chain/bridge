@@ -30,6 +30,7 @@ let intervalId: NodeJS.Timeout | null = null
 // Setup watch outside of onMounted
 const stopWatch = watch(isPending, (newValue) => {
   if (newValue && !intervalId) {
+    handleCheckTransaction();
     // Start interval when isPending becomes true
     intervalId = setInterval(handleCheckTransaction, 10_000)
   } else if (!newValue && intervalId) {
@@ -50,7 +51,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="p-4 rounded-xl mb-4 bg-white/5" :class="{ 'border border-yellow-500': isPending }" >
+  <div class="p-4 rounded-xl mb-4 bg-neutral-100 dark:bg-neutral-800 " :class="{ 'border border-yellow-500': isPending }" >
     <div class="flex justify-between items-center mb-2">
       <div class="flex items-center gap-2">
         <span class="text-sm font-semibold">From: {{ getNetworkFromChainId(transaction.fromChainId) }}</span>

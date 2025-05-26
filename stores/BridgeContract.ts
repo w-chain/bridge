@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useVueDapp } from '@vue-dapp/core';
-import { BrowserProvider, Contract, concat, zeroPadValue, toBeHex, parseUnits, hexlify, solidityPackedKeccak256, getAddress, MaxUint256 } from 'ethers';
+import { BrowserProvider, Contract, concat, zeroPadValue, toBeHex, parseUnits, MaxUint256 } from 'ethers';
 import { BRIDGE_CONTRACT_REGISTRY } from '~~/shared/contracts/bridge';
 import { getDomainId } from '~~/shared/utils/domainId';
 import type { ChainId } from '~~/shared/types';
@@ -186,21 +186,19 @@ export const useBridgeContractStore = defineStore('BridgeContract', () => {
   }
 
   async function getProposal(fromChainId: number, toChainId: number, data: string, depositNonce: string, txHash: string) {
-    if (!contracts.value ||!wallet.provider ||!isConnected.value) return;
-    if (chainId.value !== toChainId) {
-      await networkStore.switchNetworkWithChainId(toChainId);
-    }
-    const handlerAddress = contracts.value.erc20Handler;
-    const dataHash = solidityPackedKeccak256(["address", "bytes"], [getAddress(handlerAddress), hexlify(data)])
-    const provider = new BrowserProvider(wallet.provider);
-    const contract = new Contract(contracts.value.bridge, BRIDGE_ABI, provider);
-    const proposal = await contract.getProposal!(getDomainId(fromChainId as ChainId), depositNonce, dataHash);
+    if (!fromChainId ||!toChainId ||!data ||!depositNonce ||!txHash) return;
 
-    const status = Number(proposal._status);
-    const yesVotes = Number(proposal._yesVotes);
+    const res = await $fetch('/api/validator/proposal', {
+      query: {
+        toChainId,
+        fromChainId,
+        depositNonce,
+        data,
+      }
+    });
+    const { status, yesVotes } = res;
 
     if (status === 3) updateTransactionStatus(txHash, TransactionStatus.SUCCESS);
-
     return { status, yesVotes }
   }
 

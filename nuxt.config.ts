@@ -5,7 +5,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       network: process.env.NUXT_PUBLIC_NETWORK || 'testnet'
-    }
+    },
+    alchemyApiKey: process.env.ALCHEMY_API_KEY || '',
   },
 
   routeRules: {

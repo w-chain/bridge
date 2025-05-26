@@ -53,6 +53,23 @@ export const TOKENS: Token[] = [
     '0x000000000000000000000080d7991107149b5dd8396f3ade48ba07bd60d56a02',
     18
   ),
+  // BSC
+  new Token(
+    ChainId.BSC,
+    'Binance-Peg USDT',
+    TokenSymbols.USDT,
+    '0x55d398326f99059fF775485246999027B3197955',
+    '0x000000000000000000000055d398326f99059ff775485246999027b319795502',
+    18
+  ),
+  new Token(
+    ChainId.BSC,
+    'Binance-Peg USDC',
+    TokenSymbols.USDC,
+    '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
+    '0x00000000000000000000008ac76a51cc950d9822d68b83fe1ad97b32cd580d02',
+    18
+  ),
   // W Chain
   new Token(
     ChainId.WCHAIN,
@@ -69,6 +86,22 @@ export const TOKENS: Token[] = [
     '0x643eC74Ed2B79098A37Dc45dcc7F1AbfE2AdE6d8',
     '0x0000000000000000000000a0b86991c6218b36c1d19d4a2e9eb0ce3606eb4801',
     6
+  ),
+  new Token(
+    ChainId.WCHAIN,
+    'Binance-Peg USDT',
+    TokenSymbols.bUSDT,
+    '0x0Ab978880D3Bf13E448F4F773Acd817e83bDdB0E',
+    '0x000000000000000000000055d398326f99059ff775485246999027b319795502',
+    18
+  ),
+  new Token(
+    ChainId.WCHAIN,
+    'Binance-Peg USDC',
+    TokenSymbols.bUSDC,
+    '0x9B4805Dc867C279A96F3Ed0745C8bc15153A22E6',
+    '0x00000000000000000000008ac76a51cc950d9822d68b83fe1ad97b32cd580d02',
+    18
   ),
   // W Chain Testnet
   new Token(
@@ -107,4 +140,8 @@ export const TOKENS: Token[] = [
 
 export function getTokenBySymbol(chainId: ChainId, symbol: TokenSymbols): Token | undefined {
   return TOKENS.find(token => token.chainId === chainId && token.symbol === symbol);
+}
+
+export function getTokenByResourceId(chainId: ChainId, resourceId: string): Token | undefined {
+  return TOKENS.find(token => token.chainId === chainId && token.resourceId === resourceId);
 }

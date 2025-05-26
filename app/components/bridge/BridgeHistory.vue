@@ -15,40 +15,45 @@ const handleClearCompletedTransactions = async () => {
 </script>
 
 <template>
-  <div class="space-y-4">
-    
-    <h2 class="text-xl font-semibold mb-4">Pending Transactions</h2>
-    <div v-if="pendingTransactions.length === 0" class="text-center text-gray-400 py-8">
-      No pending transactions
-    </div>
-    <BridgeHistoryItem
-      v-else
-      v-for="transaction in pendingTransactions"
-      :key="transaction.txHash"
-      :transaction="transaction"
-    />
+  <div class="h-screen flex flex-col overflow-hidden">
+    <div class="space-y-4 flex-1 flex flex-col">
+      <h2 class="text-xl font-semibold">Pending Transactions</h2>
+      <div class="flex-none overflow-y-auto">
+        <div v-if="pendingTransactions.length === 0" class="text-center text-gray-400 py-8">
+          No pending transactions
+        </div>
+        <BridgeHistoryItem
+          v-else
+          v-for="transaction in pendingTransactions"
+          :key="transaction.txHash"
+          :transaction="transaction"
+        />
+      </div>
 
-    <USeparator />
-    <div class="flex justify-between items-center">
-      <h2 class="text-xl font-semibold mb-4">Completed Transactions</h2>
-      <UButton 
-        variant="outline"
-        size="sm"
-        icon="i-lucide-trash"
-        :loading="clearLoading"
-        @click="handleClearCompletedTransactions"
-      >
-        Clear Completed Txs
-      </UButton>
+      <USeparator class="flex-none" />
+      <div class="flex justify-between items-center flex-none">
+        <h2 class="text-xl font-semibold">Completed Transactions</h2>
+        <UButton 
+          variant="outline"
+          size="sm"
+          icon="i-lucide-trash"
+          :loading="clearLoading"
+          @click="handleClearCompletedTransactions"
+        >
+          Clear Completed Txs
+        </UButton>
+      </div>
+      <div class="flex-1 overflow-y-auto">
+        <div v-if="completedTransactions.length === 0" class="text-center text-gray-400 py-8">
+          No completed transactions
+        </div>
+        <BridgeHistoryItem
+          v-else
+          v-for="transaction in completedTransactions"
+          :key="transaction.txHash"
+          :transaction="transaction"
+        />
+      </div>
     </div>
-    <div v-if="completedTransactions.length === 0" class="text-center text-gray-400 py-8">
-      No completed transactions
-    </div>
-    <BridgeHistoryItem
-      v-else
-      v-for="transaction in completedTransactions"
-      :key="transaction.txHash"
-      :transaction="transaction"
-    />
   </div>
 </template>

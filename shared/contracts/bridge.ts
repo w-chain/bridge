@@ -25,7 +25,7 @@ export const BRIDGE_CONTRACT_REGISTRY = {
   },
 
   56: {
-    bridge: '',
-    erc20Handler: ''
+    bridge: '0xc74478e6B3285312bfDeF91Aea14D07a7aec8855',
+    erc20Handler: '0xBCeD2AF67a3BE7cEd7870FFC386A9759E7481D50'
   }
 }
