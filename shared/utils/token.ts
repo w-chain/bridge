@@ -16,11 +16,13 @@ export function getBSCTargetToken(token: TokenSymbols) {
 export function getTokenImage(token: TokenSymbols) {
   switch (token) {
     case TokenSymbols.USDT:
-    case TokenSymbols.bUSDT:
       return '/images/tokens/usdt.webp';
-    case TokenSymbols.bUSDC:
+    case TokenSymbols.bUSDT:
+      return '/images/tokens/busdt.webp';
     case TokenSymbols.USDC:
       return '/images/tokens/usdc.webp';
+    case TokenSymbols.bUSDC:
+      return '/images/tokens/busdc.webp';
     default:
       return '';
   }
