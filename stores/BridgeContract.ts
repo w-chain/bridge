@@ -1,10 +1,9 @@
 import { defineStore } from 'pinia'
 import { useVueDapp } from '@vue-dapp/core';
-import { BrowserProvider, Contract, concat, zeroPadValue, toBeHex, parseUnits, MaxUint256 } from 'ethers';
+import { BrowserProvider, Contract, concat, zeroPadValue, toBeHex, parseUnits, MaxUint256, formatEther } from 'ethers';
 import { BRIDGE_CONTRACT_REGISTRY } from '~~/shared/contracts/bridge';
 import { getDomainId } from '~~/shared/utils/domainId';
-import type { ChainId } from '~~/shared/types';
-import { TransactionStatus } from '~~/shared/types';
+import { TransactionStatus, ChainId } from '~~/shared/types';
 import { BRIDGE_ABI } from '~~/shared/abi/bridge';
 import { useTransactionStore, useNetworkStore } from '~~/stores';
 import type { ContractTransactionResponse } from 'ethers';
@@ -12,7 +11,7 @@ import { LazyModalBridgePreflightChecks } from '#components';
 import type Token from '~~/shared/objects/token';
 
 export const useBridgeContractStore = defineStore('BridgeContract', () => {
-  const { isConnected, wallet, chainId, watchWalletChanged } = useVueDapp();
+  const { isConnected, wallet, chainId, watchWalletChanged, watchChainIdChanged } = useVueDapp();
   const toast = useToast();
   const overlay = useOverlay();
 
@@ -51,9 +50,45 @@ export const useBridgeContractStore = defineStore('BridgeContract', () => {
     }
   }
 
+  const fee = ref<bigint>(BigInt(0));
+  const formattedFee = computed(() => {
+    return formatEther(fee.value);
+  });
+  const feeCurrencyName = computed(() => {
+    switch (chainId.value) {
+      case ChainId.BSC:
+      case ChainId.BSC_TESTNET:
+        return 'BNB';
+      case ChainId.ETH:
+      case ChainId.SEPOLIA:
+        return 'ETH';
+      case ChainId.WCHAIN:
+      case ChainId.WCHAIN_TESTNET:
+      default:
+        return 'WCO';
+    }
+  })
+
+  async function getFee() {
+    if (!contracts.value ||!wallet.provider || !isConnected.value || !chainId.value) return;if (!contracts.value ||!wallet.provider || !isConnected.value || !chainId.value) return;
+    try {
+      const contract = new Contract(contracts.value.bridge, BRIDGE_ABI, new BrowserProvider(wallet.provider));
+      const res = await contract._fee!();
+      fee.value = BigInt(res);
+      return BigInt(res);
+    } catch (error) {
+      console.error(error);
+    }
+    return BigInt(0);
+  }
+
+  watchChainIdChanged(() => {
+    getFee();
+  }, { immediate: true });
+
   watchWalletChanged(() => {
     handlerAllowances.value = {};
-  })
+  });
 
   async function getHandlerAllowance(token: Token) {
     if (!contracts.value || !wallet.provider || !wallet.address || !isConnected.value) return;
@@ -127,8 +162,10 @@ export const useBridgeContractStore = defineStore('BridgeContract', () => {
       const signer = await new BrowserProvider(wallet.provider).getSigner();
       const contract = new Contract(contracts.value.bridge, BRIDGE_ABI, signer);
 
+      const fee = await contract._fee!();
+
       // Make Deposit
-      const tx: ContractTransactionResponse = await contract.deposit!(domainId, token.resourceId, data);
+      const tx: ContractTransactionResponse = await contract.deposit!(domainId, token.resourceId, data, { value: fee });
       txHash.value = tx.hash;
       addTransaction({
         fromChainId: wallet.chainId!,
@@ -188,7 +225,7 @@ export const useBridgeContractStore = defineStore('BridgeContract', () => {
   async function getProposal(fromChainId: number, toChainId: number, data: string, depositNonce: string, txHash: string) {
     if (!fromChainId ||!toChainId ||!data ||!depositNonce ||!txHash) return;
 
-    const res = await $fetch('/api/validator/proposal', {
+    const res = await $fetch<{ status: number, yesVotes: number }>('/api/validator/proposal', {
       query: {
         toChainId,
         fromChainId,
@@ -206,6 +243,9 @@ export const useBridgeContractStore = defineStore('BridgeContract', () => {
     contracts,
     loading,
     agreedToTerms,
+    fee,
+    formattedFee,
+    feeCurrencyName,
     getHandlerAllowance,
     deposit,
     approve,

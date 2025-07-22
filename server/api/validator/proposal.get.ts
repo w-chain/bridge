@@ -43,5 +43,6 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  return await fetchProposal(Number(fromChainId), Number(toChainId), data, depositNonce);
+  const res = await fetchProposal(Number(fromChainId), Number(toChainId), data, depositNonce);
+  return res;
 })

@@ -103,6 +103,14 @@ export const TOKENS: Token[] = [
     '0x00000000000000000000008ac76a51cc950d9822d68b83fe1ad97b32cd580d02',
     18
   ),
+  new Token(
+    ChainId.WCHAIN,
+    'Binance-Peg SOL',
+    TokenSymbols.SOL,
+    '0xd4F93CACD6d607789c8eCF1DdDEba8B0c4D915A8',
+    '0x0000000000000000000000570a5d26f7765ecb712c0924e4de545b89fd43df02',
+    18
+  ),
   // W Chain Testnet
   new Token(
     ChainId.WCHAIN_TESTNET,

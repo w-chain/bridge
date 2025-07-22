@@ -8,6 +8,8 @@ export function getBSCTargetToken(token: TokenSymbols) {
       return TokenSymbols.USDT;
     case TokenSymbols.bUSDC:
       return TokenSymbols.USDC;
+    case TokenSymbols.SOL:
+      return TokenSymbols.SOL;
     default:
       throw new Error(`Unsupported token: ${token}`);
   }
@@ -23,6 +25,8 @@ export function getTokenImage(token: TokenSymbols) {
       return '/images/tokens/usdc.webp';
     case TokenSymbols.bUSDC:
       return '/images/tokens/busdc.webp';
+    case TokenSymbols.SOL:
+      return '/images/tokens/sol.webp';
     default:
       return '';
   }

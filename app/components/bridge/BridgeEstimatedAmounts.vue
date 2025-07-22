@@ -5,7 +5,7 @@ defineProps({
     required: true
   },
   fee: {
-    type: Number,
+    type: String,
     required: true
   },
   tokenSymbol: {

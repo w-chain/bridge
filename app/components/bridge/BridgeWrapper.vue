@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { useVueDapp } from '@vue-dapp/core'
 import { MaxUint256, parseUnits } from 'ethers';
-import { getNetworkNativeToken } from '~~/shared/utils';
 import { useBridgeContractStore, useBridgeStatesStore } from '~~/stores';
 
 const { wallet, watchWalletChanged } = useVueDapp();
@@ -47,6 +46,16 @@ watchWalletChanged(() => bridgeStates.resetTokens())
         />
       </div>
     </div>
+    <!-- Bridge Fee Display -->
+    <div v-if="bridgeContract.formattedFee && bridgeContract.feeCurrencyName" class="mt-4 p-3 rounded-lg bg-neutral-100 dark:bg-neutral-700">
+      <div class="flex justify-between items-center text-sm">
+        <span class="text-neutral-600 dark:text-neutral-400">Bridge Fee:</span>
+        <span class="font-medium text-neutral-900 dark:text-neutral-100">
+          {{ bridgeContract.formattedFee }} {{ bridgeContract.feeCurrencyName }}
+        </span>
+      </div>
+    </div>
+    
     <Transition
       enter-active-class="transition-all duration-300 ease-out"
       enter-from-class="transform -translate-y-full opacity-0"
@@ -58,9 +67,9 @@ watchWalletChanged(() => bridgeStates.resetTokens())
       <BridgeEstimatedAmounts
         v-if="amount && bridgeStates.fromToken"
         :amount="amount"
-        :fee="bridgeStates.fee"
+        :fee="bridgeContract.formattedFee"
         :token-symbol="bridgeStates.fromToken ?? ''"
-        :currency="getNetworkNativeToken(bridgeStates.from)"
+        :currency="bridgeContract.feeCurrencyName"
       />
     </Transition>
   </div>
